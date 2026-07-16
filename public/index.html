@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Snare E2E throwaway test app</title>
+</head>
+<body>
+  <h1>Snare E2E throwaway test app</h1>
+  <p>Click the button to compute a total. This deliberately omits the required
+  <code>items</code> query param, which crashes the server's total calculation.</p>
+  <button id="trigger">Compute total (missing items param)</button>
+  <div id="status">idle</div>
+
+  <script type="module">
+    import { init, captureException } from "./vendor/snare-sdk/index.js";
+
+    // NOTE: filled in after a real SDK key is generated via the dashboard.
+    init({
+      projectId: "__SNARE_PROJECT_ID__",
+      apiKey: "__SNARE_SDK_API_KEY__",
+      apiBase: "https://snare-intake.fly.dev",
+    });
+
+    document.getElementById("trigger").addEventListener("click", async () => {
+      const status = document.getElementById("status");
+      status.textContent = "requesting...";
+      try {
+        const res = await fetch("/api/total");
+        if (!res.ok) {
+          const body = await res.text();
+          throw new Error(`GET /api/total failed with ${res.status}: ${body}`);
+        }
+        const data = await res.json();
+        status.textContent = "total: " + data.total;
+      } catch (err) {
+        status.textContent = "error: " + err.message;
+        captureException(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "snare-e2e-throwaway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Throwaway public repo with a deliberate bug, used to end-to-end test Snare's detect -> fix -> PR loop.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
