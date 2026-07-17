@@ -12,3 +12,6 @@ npm install
 npm start   # serves on :3300
 npm test    # currently has one failing test, by design
 ```
+
+This line is an unrelated documentation tweak, not a code fix.
+Second unrelated doc tweak, now that push events are actually subscribed.
