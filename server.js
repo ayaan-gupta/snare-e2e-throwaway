@@ -4,6 +4,7 @@ const { calculateTotal } = require("./lib/total");
 const { cartTotal } = require("./lib/cart");
 const { lineItem } = require("./lib/catalog");
 const { applyDiscount } = require("./lib/discount");
+const { shippingCents } = require("./lib/shipping");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,6 +25,11 @@ app.get("/api/checkout", (req, res) => {
   const items = skus.map((sku) => lineItem(sku, 1));
   const subtotal = cartTotal(items);
   res.json({ total: applyDiscount(subtotal, req.query.code) });
+});
+
+app.get("/api/shipping", (req, res) => {
+  const subtotal = Number(req.query.subtotal || 0);
+  res.json({ shipping: shippingCents(subtotal, String(req.query.country || "us")) });
 });
 
 const port = process.env.PORT || 3300;
