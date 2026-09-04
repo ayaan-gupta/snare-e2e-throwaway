@@ -9,3 +9,7 @@ test("shipping is a flat fee below the free threshold", () => {
 test("shipping is free at or above the threshold", () => {
   assert.equal(shippingCents(5000, "us"), 0);
 });
+
+test("shipping returns null for a country with no rate, instead of throwing", () => {
+  assert.equal(shippingCents(3200, "gb"), null);
+});

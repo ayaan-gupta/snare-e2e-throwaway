@@ -29,7 +29,13 @@ app.get("/api/checkout", (req, res) => {
 
 app.get("/api/shipping", (req, res) => {
   const subtotal = Number(req.query.subtotal || 0);
-  res.json({ shipping: shippingCents(subtotal, String(req.query.country || "us")) });
+  const country = String(req.query.country || "us");
+  const shipping = shippingCents(subtotal, country);
+  if (shipping === null) {
+    res.status(400).json({ error: `unsupported country: ${country}` });
+    return;
+  }
+  res.json({ shipping });
 });
 
 const port = process.env.PORT || 3300;
