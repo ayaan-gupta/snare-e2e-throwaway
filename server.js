@@ -5,6 +5,7 @@ const { cartTotal } = require("./lib/cart");
 const { lineItem } = require("./lib/catalog");
 const { applyDiscount } = require("./lib/discount");
 const { shippingCents } = require("./lib/shipping");
+const { taxCents } = require("./lib/tax");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
@@ -30,6 +31,11 @@ app.get("/api/checkout", (req, res) => {
 app.get("/api/shipping", (req, res) => {
   const subtotal = Number(req.query.subtotal || 0);
   res.json({ shipping: shippingCents(subtotal, String(req.query.country || "us")) });
+});
+
+app.get("/api/tax", (req, res) => {
+  const subtotal = Number(req.query.subtotal || 0);
+  res.json({ tax: taxCents(subtotal, String(req.query.region || "us")) });
 });
 
 const port = process.env.PORT || 3300;
