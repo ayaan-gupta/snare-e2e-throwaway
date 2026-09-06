@@ -9,3 +9,7 @@ test("us tax on a $32.00 subtotal", () => {
 test("ca tax on a $32.00 subtotal", () => {
   assert.equal(taxCents(3200, "ca"), 416);
 });
+
+test("unconfigured region returns null instead of throwing", () => {
+  assert.equal(taxCents(3200, "eu"), null);
+});
