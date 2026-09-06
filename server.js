@@ -35,7 +35,16 @@ app.get("/api/shipping", (req, res) => {
 
 app.get("/api/tax", (req, res) => {
   const subtotal = Number(req.query.subtotal || 0);
-  res.json({ tax: taxCents(subtotal, String(req.query.region || "us")) });
+  const region = String(req.query.region || "us");
+  try {
+    res.json({ tax: taxCents(subtotal, region) });
+  } catch (err) {
+    if (err && err.code === "UNSUPPORTED_REGION") {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    throw err;
+  }
 });
 
 const port = process.env.PORT || 3300;
